@@ -1,0 +1,20 @@
+{
+  "home": {
+    "title": "ברוכים הבאים ל-Payload",
+    "description": "זהו עמוד הבית",
+    "cta": {
+      "getStarted": "התחל עכשיו",
+      "learnMore": "למד עוד"
+    }
+  },
+  "common": {
+    "navigation": {
+      "home": "בית",
+      "about": "אודות",
+      "contact": "צור קשר"
+    },
+    "footer": {
+      "copyright": "כל הזכויות שמורות"
+    }
+  }
+}

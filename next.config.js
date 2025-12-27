@@ -1,7 +1,10 @@
 import { withPayload } from '@payloadcms/next/withPayload'
 import { withSentryConfig } from '@sentry/nextjs'
+import createNextIntlPlugin from 'next-intl/plugin'
 
 import redirects from './redirects.js'
+
+const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts')
 
 const NEXT_PUBLIC_SERVER_URL = process.env.VERCEL_PROJECT_PRODUCTION_URL
   ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
@@ -35,8 +38,9 @@ const nextConfig = {
 }
 
 const configWithPayload = withPayload(nextConfig, { devBundleServerPackages: false })
+const configWithIntl = withNextIntl(configWithPayload)
 
-export default withSentryConfig(configWithPayload, {
+export default withSentryConfig(configWithIntl, {
   org: process.env.SENTRY_ORG,
   project: process.env.SENTRY_PROJECT,
   silent: !process.env.CI,

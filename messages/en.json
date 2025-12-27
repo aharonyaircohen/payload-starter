@@ -1,0 +1,20 @@
+{
+  "home": {
+    "title": "Welcome to Payload",
+    "description": "This is the home page",
+    "cta": {
+      "getStarted": "Get Started",
+      "learnMore": "Learn More"
+    }
+  },
+  "common": {
+    "navigation": {
+      "home": "Home",
+      "about": "About",
+      "contact": "Contact"
+    },
+    "footer": {
+      "copyright": "All rights reserved"
+    }
+  }
+}

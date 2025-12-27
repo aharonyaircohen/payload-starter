@@ -727,7 +727,6 @@ export const Posts: CollectionConfig = {
 ### Performance Best Practices
 
 1. **Import correctly:**
-
    - Admin Panel: `import { Button } from '@payloadcms/ui'`
    - Frontend: `import { Button } from '@payloadcms/ui/elements/Button'`
 
@@ -742,7 +741,6 @@ export const Posts: CollectionConfig = {
    ```
 
 3. **Prefer Server Components** - Only use Client Components when you need:
-
    - State (useState, useReducer)
    - Effects (useEffect)
    - Event handlers (onClick, onChange)
@@ -755,7 +753,7 @@ export const Posts: CollectionConfig = {
 Components can be styled using SCSS files. Import a `.scss` file colocated with your component:
 
 ```tsx
-import './index.scss'  // Component-specific styles
+import './index.scss' // Component-specific styles
 
 export function MyComponent() {
   return <div className="my-component">Content</div>
@@ -782,6 +780,7 @@ export function MyComponent() {
 ```
 
 **Project Convention**: This project uses `index.scss` naming convention. Place styles alongside your component file:
+
 - Component: `src/components/MyComponent/index.tsx`
 - Styles: `src/components/MyComponent/index.scss`
 
@@ -1067,19 +1066,16 @@ For deeper exploration of specific topics, refer to the context files located in
 ### Available Context Files
 
 1. **`payload-overview.md`** - High-level architecture and core concepts
-
    - Payload structure and initialization
    - Configuration fundamentals
    - Database adapters overview
 
 2. **`security-critical.md`** - Critical security patterns (⚠️ IMPORTANT)
-
    - Local API access control
    - Transaction safety in hooks
    - Preventing infinite hook loops
 
 3. **`collections.md`** - Collection configurations
-
    - Basic collection patterns
    - Auth collections with RBAC
    - Upload collections
@@ -1087,7 +1083,6 @@ For deeper exploration of specific topics, refer to the context files located in
    - Globals
 
 4. **`fields.md`** - Field types and patterns
-
    - All field types with examples
    - Conditional fields
    - Virtual fields
@@ -1095,13 +1090,11 @@ For deeper exploration of specific topics, refer to the context files located in
    - Common field patterns
 
 5. **`field-type-guards.md`** - TypeScript field type utilities
-
    - Field type checking utilities
    - Safe type narrowing
    - Runtime field validation
 
 6. **`access-control.md`** - Permission patterns
-
    - Collection-level access
    - Field-level access
    - Row-level security
@@ -1109,48 +1102,41 @@ For deeper exploration of specific topics, refer to the context files located in
    - Multi-tenant access control
 
 7. **`access-control-advanced.md`** - Complex access patterns
-
    - Nested document access
    - Cross-collection permissions
    - Dynamic role hierarchies
    - Performance optimization
 
 8. **`hooks.md`** - Lifecycle hooks
-
    - Collection hooks
    - Field hooks
    - Hook context patterns
    - Common hook recipes
 
 9. **`queries.md`** - Database operations
-
    - Local API usage
    - Query operators
    - Complex queries with AND/OR
    - Performance optimization
 
 10. **`endpoints.md`** - Custom API endpoints
-
     - REST endpoint patterns
     - Authentication in endpoints
     - Error handling
     - Route parameters
 
 11. **`adapters.md`** - Database and storage adapters
-
     - MongoDB, PostgreSQL, SQLite patterns
     - Storage adapter usage (S3, Azure, GCS, etc.)
     - Custom adapter development
 
 12. **`plugin-development.md`** - Creating plugins
-
     - Plugin architecture
     - Modifying configuration
     - Plugin hooks
     - Best practices
 
 13. **`components.md`** - Custom Components
-
     - Component types (Root, Collection, Global, Field)
     - Server vs Client Components
     - Component paths and definition
