@@ -1,0 +1,12 @@
+{
+  "channels": {
+    "slack": {
+      "enabled": true,
+      "webhookUrl": "$SLACK_WEBHOOK_URL"
+    },
+    "slack-dev": {
+      "enabled": false,
+      "webhookUrl": "$SLACK_WEBHOOK_URL_DEV"
+    }
+  }
+}

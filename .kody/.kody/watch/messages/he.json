@@ -1,0 +1,37 @@
+{
+  "common": {
+    "languageSwitcher": {
+      "label": "שפה",
+      "english": "אנגלית",
+      "hebrew": "עברית"
+    },
+    "notFound": {
+      "title": "404",
+      "message": "דף זה לא נמצא.",
+      "goHome": "חזרה לדף הבית"
+    }
+  },
+  "courses": {
+    "title": "קורסים",
+    "description": "עיין בכל הקורסים הזמינים",
+    "heroTitle": "עתיד הלמידה המקוונת",
+    "heroDescription": "שלוט במיומנויות חדשות עם הקורסים המבוססים על פרויקטים, חידונים אינטראקטיביים וקהילת לומדים תומכת.",
+    "liveContent": "תוכן חדש מתווסף באופן קבוע",
+    "featuredTitle": "קורסים מומלצים",
+    "featuredDescription": "קורסים שנבחרו בקפידה כדי לעזור לך במסע הלמידה שלך.",
+    "backToCourses": "חזרה לקורסים",
+    "openCourse": "פתח קורס",
+    "viewChapter": "צפה בפרק",
+    "viewLesson": "צפה בשיעור",
+    "chaptersSection": "פרקים",
+    "lessonsSection": "שיעורים",
+    "chapter": "פרק",
+    "lesson": "שיעור",
+    "noCourses": "אין קורסים זמינים כרגע.",
+    "noChapters": "אין פרקים זמינים לקורס זה.",
+    "noLessons": "אין שיעורים זמינים לפרק זה.",
+    "noPDF": "תוכן PDF אינו זמין לשיעור זה.",
+    "pdfBadge": "PDF",
+    "notFound": "לא נמצא"
+  }
+}

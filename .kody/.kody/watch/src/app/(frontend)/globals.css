@@ -1,0 +1,221 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-size: unset;
+    font-weight: unset;
+  }
+
+  :root,
+  [data-theme='light'] {
+    /* Light background - pure white */
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    /* Card: visible gray for footer/cards - 6% darker than white */
+    --card: 220 14% 94%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    /* Primary: vibrant blue for emphasis */
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary: lighter gray for header - distinct from cards */
+    --secondary: 220 14% 97%;
+    --secondary-foreground: 222.2 84% 4.9%;
+
+    --muted: 220 14% 95%;
+    --muted-foreground: 220 8.9% 46.1%;
+
+    /* Accent: vivid purple */
+    --accent: 271 91% 65%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Border: dark gray for clear visibility */
+    --border: 220 13% 75%;
+    --input: 220 13% 91%;
+
+    /* Focus ring follows accent */
+    --ring: 271 91% 65%;
+
+    --radius: 0.75rem;
+
+    --success: 142 71% 45%;
+    --warning: 38 92% 50%;
+    --error: 0 72% 51%;
+
+    /* Semantic colors - components use these */
+    --header-bg: var(--secondary);
+    --header-fg: var(--secondary-foreground);
+    --footer-bg: var(--card);
+
+    /* Interactive element states */
+    --hover-bg: var(--muted);
+    --selected-bg: var(--muted);
+    --selected-fg: var(--foreground);
+
+    /* Form elements */
+    --form-bg: var(--background);
+    --form-border: var(--border);
+    --form-placeholder: var(--muted-foreground);
+
+    /* Command palette / Modals */
+    --surface-elevated: var(--background);
+    --surface-elevated-fg: var(--foreground);
+  }
+
+  [data-theme='dark'] {
+    /* Deep navy blue background matching #06112a from LearnFlow */
+    --background: 222 75% 9%;
+    --foreground: 210 40% 98%;
+
+    /* Card surfaces - slightly elevated from background */
+    --card: 222 75% 13%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222 75% 13%;
+    --popover-foreground: 210 40% 98%;
+
+    /* Primary: bright vibrant blue from LearnFlow */
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary: elevated blue surface */
+    --secondary: 222 75% 17%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 222 75% 17%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    /* Accent: vibrant blue */
+    --accent: 217 91% 60%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    /* Borders - slightly lighter for visibility */
+    --border: 222 75% 20% / 0.7;
+    --input: 222 75% 17%;
+
+    /* Focus ring follows accent */
+    --ring: 217 91% 60%;
+
+    --success: 142 71% 45%;
+    --warning: 38 92% 50%;
+    --error: 0 72% 51%;
+
+    /* Semantic colors - components use these */
+    --header-bg: var(--card);
+    --header-fg: var(--card-foreground);
+    --footer-bg: var(--card);
+
+    /* Interactive element states */
+    --hover-bg: var(--muted);
+    --selected-bg: var(--muted);
+    --selected-fg: var(--foreground);
+
+    /* Form elements */
+    --form-bg: var(--background);
+    --form-border: var(--border);
+    --form-placeholder: var(--muted-foreground);
+
+    /* Command palette / Modals */
+    --surface-elevated: var(--card);
+    --surface-elevated-fg: var(--card-foreground);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground min-h-[100vh] flex flex-col;
+  }
+}
+
+@layer utilities {
+  /* Smooth scrolling for anchor links */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Hide scrollbar but keep functionality */
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Backdrop blur support */
+  @supports (backdrop-filter: blur(10px)) {
+    .backdrop-blur-lg {
+      backdrop-filter: blur(16px);
+    }
+  }
+
+  /* Smooth transitions for theme changes */
+  * {
+    transition-property: background-color, border-color, color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+  }
+
+  /* Prevent transition on page load */
+  .no-transition {
+    transition: none !important;
+  }
+
+  /* Gradient utilities inspired by LearnFlow */
+  .gradient-border {
+    position: relative;
+    border-radius: var(--radius);
+    background: linear-gradient(to bottom right, hsl(var(--card)), hsl(var(--secondary)));
+  }
+
+  .gradient-border::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, hsl(var(--primary) / 0.4), hsl(var(--accent) / 0.2));
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  .glass-card {
+    background: hsl(var(--card) / 0.6);
+    backdrop-filter: blur(12px);
+    border: 1px solid hsl(var(--border));
+  }
+}
+
+html {
+  opacity: 0;
+}
+
+html[data-theme='dark'],
+html[data-theme='light'] {
+  opacity: initial;
+}
