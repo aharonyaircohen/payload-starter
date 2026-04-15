@@ -43,6 +43,19 @@ jobs:
           node-version: 22
           cache: pnpm
 
+      - name: Debug agent files
+        run: |
+          echo "=== Debug: current directory ==="
+          pwd
+          echo "=== Debug: .kody directory ==="
+          ls -la .kody/ 2>/dev/null || echo "NO .kody directory"
+          echo "=== Debug: hash ==="
+          echo "hash: 'hashFiles result'"
+          echo "=== Debug: git log ==="
+          git log --oneline -3
+          echo "=== Debug: find .kody ==="
+          find .kody -name "agent.json" 2>/dev/null | head -10 || echo "No agent.json found"
+
       - name: Install Claude Code
         if: hashFiles('.kody/watch/agents/*/agent.json') != ''
         run: npm install -g @anthropic-ai/claude-code
