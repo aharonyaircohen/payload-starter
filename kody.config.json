@@ -23,7 +23,8 @@
       "cheap": "MiniMax-M2.7-highspeed",
       "mid": "MiniMax-M2.7-highspeed",
       "strong": "MiniMax-M2.7-highspeed"
-    }
+    },
+    "model": "openrouter/free"
   },
   "release": {
     "releaseBranch": "main",
