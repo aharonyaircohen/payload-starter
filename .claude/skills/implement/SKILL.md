@@ -23,6 +23,15 @@ You are a senior engineer executing a single, well-scoped task in this repositor
 
 ## Workflow (Must Follow)
 
+**🚨 CRITICAL SAFETY RULE - READ FIRST:**
+
+**NEVER commit or push to the default branch (main/master)**
+
+- All work MUST be done on a feature branch
+- Always verify current branch before: committing, pushing, or creating PR
+- The helper script includes safety checks to prevent accidental pushes to default branch
+- If you're ever on the default branch, immediately switch to your feature branch
+
 ### 1. Understand & Validate
 
 - Understand the task objective and constraints
@@ -35,13 +44,35 @@ You are a senior engineer executing a single, well-scoped task in this repositor
 
 ### 2. Create Git Branch
 
-Branch naming convention:
+**IMPORTANT: Always sync with default branch first:**
+
+```bash
+# Get the default branch name (usually 'main' or 'master')
+DEFAULT_BRANCH=$(git remote show origin | grep 'HEAD branch' | cut -d' ' -f5)
+
+# Switch to default branch, fetch latest, and pull
+git checkout $DEFAULT_BRANCH
+git fetch origin
+git pull origin $DEFAULT_BRANCH
+
+# Create new feature branch from updated default branch
+git checkout -b <branch-name>
+```
+
+**⚠️ CRITICAL SAFETY RULE:**
+
+- **NEVER push to the default branch (main/master)**
+- **ONLY push to your newly created feature branch**
+- Always verify you're on the correct branch before pushing: `git branch --show-current`
+- If you accidentally switch to default branch, immediately switch back to your feature branch
+
+**Branch naming convention:**
 
 - `feat/<short-slug>` - for new features
 - `fix/<short-slug>` - for bug fixes
 - `chore/<short-slug>` - for maintenance tasks
 
-Example: `feat/user-avatar-upload`
+**Example:** `feat/user-avatar-upload`
 
 ### 3. Implement Changes
 
@@ -82,7 +113,23 @@ pnpm -s test
 
 ### 5. Commit Discipline
 
-Use **Conventional Commits** (commitlint enforced):
+**⚠️ BEFORE COMMITTING - Verify you're on your feature branch:**
+
+```bash
+# Check current branch
+CURRENT_BRANCH=$(git branch --show-current)
+DEFAULT_BRANCH=$(git remote show origin | grep 'HEAD branch' | cut -d' ' -f5)
+
+# Safety check
+if [ "$CURRENT_BRANCH" = "$DEFAULT_BRANCH" ]; then
+    echo "❌ ERROR: You are on $DEFAULT_BRANCH - switch to your feature branch!"
+    exit 1
+fi
+
+echo "✓ Safe to commit on branch: $CURRENT_BRANCH"
+```
+
+**Use Conventional Commits** (commitlint enforced):
 
 ```
 feat: add user avatar upload to profile settings
@@ -92,6 +139,8 @@ chore: update dependencies to latest versions
 
 **Rules:**
 
+- **NEVER commit directly to default branch (main/master)**
+- Always verify current branch before committing
 - Make commits logically grouped
 - Avoid generic messages like "misc" or "updates"
 - Use imperative mood: "add feature" not "added feature"
@@ -121,7 +170,39 @@ chore: update dependencies to latest versions
    gh auth status || gh auth login
    ```
 
-2. **Push branch and create PR:**
+2. **Verify you're on your feature branch (CRITICAL SAFETY CHECK):**
+
+   ```bash
+   CURRENT_BRANCH=$(git branch --show-current)
+   DEFAULT_BRANCH=$(git remote show origin | grep 'HEAD branch' | cut -d' ' -f5)
+
+   if [ "$CURRENT_BRANCH" = "$DEFAULT_BRANCH" ]; then
+       echo "❌ ERROR: You are on $DEFAULT_BRANCH - DO NOT PUSH!"
+       echo "Switch to your feature branch first"
+       exit 1
+   fi
+
+   echo "✓ Safe to proceed on branch: $CURRENT_BRANCH"
+   ```
+
+3. **Update branch with latest changes from default branch:**
+
+   ```bash
+   # Get default branch name
+   DEFAULT_BRANCH=$(git remote show origin | grep 'HEAD branch' | cut -d' ' -f5)
+
+   # Fetch latest changes
+   git fetch origin
+
+   # Rebase your branch on top of the latest default branch
+   git rebase origin/$DEFAULT_BRANCH
+
+   # If conflicts occur, resolve them and continue:
+   # git add <resolved-files>
+   # git rebase --continue
+   ```
+
+4. **Push branch and create PR:**
 
    **Option A: Use the helper script** (recommended):
 
@@ -136,8 +217,8 @@ chore: update dependencies to latest versions
    **Option B: Manual gh command:**
 
    ```bash
-   # Push branch
-   git push -u origin <branch-name>
+   # Push branch (use --force-with-lease if rebased)
+   git push -u origin <branch-name> --force-with-lease
 
    # Create PR
    gh pr create --title "<conventional-commit-title>" --body "$(cat <<'EOF'
@@ -321,6 +402,8 @@ export async function myServerAction(input: unknown) {
 
 ❌ **DO NOT**:
 
+- **🚨 CRITICAL: NEVER commit or push to default branch (main/master)** - Always work on feature branches
+- **🚨 CRITICAL: NEVER skip branch verification before pushing** - Always check `git branch --show-current`
 - Skip tests ("I'll add tests later")
 - Commit without running quality gates locally first
 - Add dependencies without asking
@@ -337,6 +420,8 @@ export async function myServerAction(input: unknown) {
 
 ✅ **DO**:
 
+- **Always verify you're on a feature branch before committing/pushing**
+- Use the helper script's built-in safety checks
 - Run all quality gates before committing
 - Keep PRs focused and small
 - Ask before adding dependencies

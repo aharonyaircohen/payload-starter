@@ -19,6 +19,15 @@ const nextConfig = {
           protocol: url.protocol.replace(':', ''),
         }
       }),
+      // Allow localhost with subdomains (e.g., en.localhost, he.localhost)
+      {
+        protocol: 'http',
+        hostname: '*.localhost',
+      },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+      },
     ],
   },
   webpack: (webpackConfig) => {

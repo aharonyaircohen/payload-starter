@@ -13,85 +13,129 @@
     font-weight: unset;
   }
 
-  :root {
-    --background: 220 40% 97%;
+  :root,
+  [data-theme='light'] {
+    /* Light background - pure white */
+    --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
 
-    --card: 240 5% 96%;
+    /* Card: visible gray for footer/cards - 6% darker than white */
+    --card: 220 14% 94%;
     --card-foreground: 222.2 84% 4.9%;
 
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    /* Primary: light blue in light mode */
-    --primary: 220 40% 97%;
-    --primary-foreground: 222.2 84% 4.9%;
+    /* Primary: vibrant blue for emphasis */
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 100%;
 
-    /* Secondary: soft purple tint */
-    --secondary: 251 91% 95%;
-    --secondary-foreground: 219 83% 14%;
+    /* Secondary: lighter gray for header - distinct from cards */
+    --secondary: 220 14% 97%;
+    --secondary-foreground: 222.2 84% 4.9%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 220 14% 95%;
+    --muted-foreground: 220 8.9% 46.1%;
 
     /* Accent: vivid purple */
     --accent: 271 91% 65%;
-    --accent-foreground: 210 40% 98%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 240 6% 80%;
-    --input: 214.3 31.8% 91.4%;
+    /* Border: dark gray for clear visibility */
+    --border: 220 13% 75%;
+    --input: 220 13% 91%;
 
     /* Focus ring follows accent */
     --ring: 271 91% 65%;
 
-    --radius: 0.2rem;
+    --radius: 0.75rem;
 
-    --success: 196 52% 74%;
-    --warning: 34 89% 85%;
-    --error: 10 100% 86%;
+    --success: 142 71% 45%;
+    --warning: 38 92% 50%;
+    --error: 0 72% 51%;
+
+    /* Semantic colors - components use these */
+    --header-bg: var(--secondary);
+    --header-fg: var(--secondary-foreground);
+    --footer-bg: var(--card);
+
+    /* Interactive element states */
+    --hover-bg: var(--muted);
+    --selected-bg: var(--muted);
+    --selected-fg: var(--foreground);
+
+    /* Form elements */
+    --form-bg: var(--background);
+    --form-border: var(--border);
+    --form-placeholder: var(--muted-foreground);
+
+    /* Command palette / Modals */
+    --surface-elevated: var(--background);
+    --surface-elevated-fg: var(--foreground);
   }
 
   [data-theme='dark'] {
-    --background: 220 40% 8%;
+    /* Deep navy blue background matching #06112a from LearnFlow */
+    --background: 222 75% 9%;
     --foreground: 210 40% 98%;
 
-    --card: 220 40% 12%;
+    /* Card surfaces - slightly elevated from background */
+    --card: 222 75% 13%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 222.2 84% 4.9%;
+    --popover: 222 75% 13%;
     --popover-foreground: 210 40% 98%;
 
-    /* Primary: dark blue in dark mode */
-    --primary: 220 40% 12%;
-    --primary-foreground: 210 40% 98%;
+    /* Primary: bright vibrant blue from LearnFlow */
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 100%;
 
-    /* Secondary: deep violet surface */
-    --secondary: 261 73% 23%;
+    /* Secondary: elevated blue surface */
+    --secondary: 222 75% 17%;
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 217.2 32.6% 17.5%;
+    --muted: 222 75% 17%;
     --muted-foreground: 215 20.2% 65.1%;
 
-    /* Accent: vivid purple */
-    --accent: 271 91% 65%;
-    --accent-foreground: 210 40% 98%;
+    /* Accent: vibrant blue */
+    --accent: 217 91% 60%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
-    /* FIX: valid HSL with alpha (no commas) */
-    --border: 0 0% 15% / 0.8;
-    --input: 217.2 32.6% 17.5%;
+    /* Borders - slightly lighter for visibility */
+    --border: 222 75% 20% / 0.7;
+    --input: 222 75% 17%;
 
     /* Focus ring follows accent */
-    --ring: 271 91% 65%;
+    --ring: 217 91% 60%;
 
-    --success: 196 100% 14%;
-    --warning: 34 51% 25%;
-    --error: 10 39% 43%;
+    --success: 142 71% 45%;
+    --warning: 38 92% 50%;
+    --error: 0 72% 51%;
+
+    /* Semantic colors - components use these */
+    --header-bg: var(--card);
+    --header-fg: var(--card-foreground);
+    --footer-bg: var(--card);
+
+    /* Interactive element states */
+    --hover-bg: var(--muted);
+    --selected-bg: var(--muted);
+    --selected-fg: var(--foreground);
+
+    /* Form elements */
+    --form-bg: var(--background);
+    --form-border: var(--border);
+    --form-placeholder: var(--muted-foreground);
+
+    /* Command palette / Modals */
+    --surface-elevated: var(--card);
+    --surface-elevated-fg: var(--card-foreground);
   }
 }
 
@@ -136,6 +180,34 @@
   /* Prevent transition on page load */
   .no-transition {
     transition: none !important;
+  }
+
+  /* Gradient utilities inspired by LearnFlow */
+  .gradient-border {
+    position: relative;
+    border-radius: var(--radius);
+    background: linear-gradient(to bottom right, hsl(var(--card)), hsl(var(--secondary)));
+  }
+
+  .gradient-border::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, hsl(var(--primary) / 0.4), hsl(var(--accent) / 0.2));
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  .glass-card {
+    background: hsl(var(--card) / 0.6);
+    backdrop-filter: blur(12px);
+    border: 1px solid hsl(var(--border));
   }
 }
 

@@ -18,5 +18,7 @@ export default {
         'revert', // Reverts a previous commit
       ],
     ],
+    'body-min-length': [2, 'always', 20], // Require at least 20 characters in commit body
+    'body-empty': [2, 'never'], // Body must not be empty
   },
 }

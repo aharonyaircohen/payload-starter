@@ -19,15 +19,48 @@ fi
 # Get current branch
 BRANCH=$(git branch --show-current)
 
+# Get default branch name
+echo "Getting default branch name..."
+DEFAULT_BRANCH=$(git remote show origin | grep 'HEAD branch' | cut -d' ' -f5)
+echo "Default branch: $DEFAULT_BRANCH"
+
+# SAFETY CHECK: Never push to default branch
+if [ "$BRANCH" = "$DEFAULT_BRANCH" ]; then
+    echo "❌ ERROR: Cannot push to default branch '$DEFAULT_BRANCH'"
+    echo "You are currently on the default branch."
+    echo "Please switch to your feature branch first:"
+    echo "  git checkout <your-feature-branch>"
+    exit 1
+fi
+
+echo "✓ Current branch: $BRANCH (safe to push)"
+
 # Get arguments
 PR_TITLE="${1:-feat: update}"
 WHAT_WHY="${2:-[Brief description of what changed and why]}"
 SCOPE="${3:-[List affected files/modules/features]}"
 TEST_RESULTS="${4:-[Test results]}"
 
-# Push branch
+# Update branch with latest changes from default branch
+echo "Fetching latest changes from origin..."
+git fetch origin
+
+echo "Rebasing $BRANCH on top of origin/$DEFAULT_BRANCH..."
+if git rebase origin/$DEFAULT_BRANCH; then
+    echo "✓ Branch successfully rebased"
+else
+    echo "❌ Rebase failed - please resolve conflicts manually"
+    echo "After resolving conflicts, run:"
+    echo "  git add <resolved-files>"
+    echo "  git rebase --continue"
+    echo "  git push -u origin $BRANCH --force-with-lease"
+    echo "Then run this script again"
+    exit 1
+fi
+
+# Push branch (use --force-with-lease since we rebased)
 echo "Pushing branch: $BRANCH"
-git push -u origin "$BRANCH"
+git push -u origin "$BRANCH" --force-with-lease
 
 # Create PR
 echo "Creating pull request..."

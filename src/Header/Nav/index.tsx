@@ -7,6 +7,8 @@ import type { Header as HeaderType } from '@/payload-types'
 import { CMSLink } from '@/components/Link'
 import Link from 'next/link'
 import { SearchIcon } from 'lucide-react'
+import { LanguageSwitcher } from '@/components/LanguageSwitcher'
+import { useTranslations } from '@/providers/I18n'
 
 interface HeaderNavProps {
   data: HeaderType
@@ -14,6 +16,7 @@ interface HeaderNavProps {
 }
 
 export const HeaderNav: React.FC<HeaderNavProps> = ({ data, userName }) => {
+  const t = useTranslations('courses')
   const navItems = data?.navItems || []
 
   // Group navigation items by type
@@ -53,17 +56,28 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({ data, userName }) => {
         </div>
       )}
 
-      {/* Separator before search */}
+      {/* Separator before courses */}
       {navItems.length > 0 && <div className="h-6 w-px bg-border" />}
+
+      {/* Courses Link */}
+      <Link href="/courses" className="text-sm font-medium hover:text-primary transition-colors">
+        {t('title')}
+      </Link>
 
       {/* Search */}
       <Link
         href="/search"
-        className="p-2 rounded-lg hover:bg-muted transition-colors"
+        className="p-2 rounded-lg hover:bg-hover transition-colors"
         aria-label="Search"
       >
-        <SearchIcon className="w-5 text-foreground" />
+        <SearchIcon className="w-5" />
       </Link>
+
+      {/* Separator before language switcher */}
+      <div className="h-6 w-px bg-border" />
+
+      {/* Language Switcher */}
+      <LanguageSwitcher />
     </nav>
   )
 }

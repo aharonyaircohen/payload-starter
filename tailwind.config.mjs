@@ -49,11 +49,20 @@ const config = {
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+        'gradient-shift': 'gradient-shift 8s ease infinite',
       },
       borderRadius: {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
+        xl: 'calc(var(--radius) + 4px)',
+        '2xl': 'calc(var(--radius) + 8px)',
+      },
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+        'gradient-subtle':
+          'linear-gradient(135deg, hsl(var(--primary) / 0.1), hsl(var(--accent) / 0.05))',
       },
       colors: {
         accent: {
@@ -92,6 +101,25 @@ const config = {
         success: 'hsl(var(--success))',
         error: 'hsl(var(--error))',
         warning: 'hsl(var(--warning))',
+        header: {
+          DEFAULT: 'hsl(var(--header-bg))',
+          foreground: 'hsl(var(--header-fg))',
+        },
+        footer: 'hsl(var(--footer-bg))',
+        hover: 'hsl(var(--hover-bg))',
+        selected: {
+          DEFAULT: 'hsl(var(--selected-bg))',
+          foreground: 'hsl(var(--selected-fg))',
+        },
+        form: {
+          DEFAULT: 'hsl(var(--form-bg))',
+          border: 'hsla(var(--form-border))',
+          placeholder: 'hsl(var(--form-placeholder))',
+        },
+        elevated: {
+          DEFAULT: 'hsl(var(--surface-elevated))',
+          foreground: 'hsl(var(--surface-elevated-fg))',
+        },
       },
       fontFamily: {
         mono: ['var(--font-geist-mono)'],
@@ -105,6 +133,10 @@ const config = {
         'accordion-up': {
           from: { height: 'var(--radix-accordion-content-height)' },
           to: { height: '0' },
+        },
+        'gradient-shift': {
+          '0%, 100%': { backgroundPosition: '0% 50%' },
+          '50%': { backgroundPosition: '100% 50%' },
         },
       },
       typography: () => ({
