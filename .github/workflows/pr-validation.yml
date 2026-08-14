@@ -46,6 +46,11 @@ jobs:
         env:
           NODE_OPTIONS: --no-deprecation
 
+      - name: Run smoke test
+        run: pnpm smoke-test
+        env:
+          NODE_OPTIONS: --no-deprecation
+
 single-run-mailbox:
   needs: validate
   runs-on: ubuntu-latest
