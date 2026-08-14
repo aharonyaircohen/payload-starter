@@ -1,0 +1,13 @@
+{
+  "id": "daily-web-release-loop",
+  "trigger": {
+    "type": "schedule",
+    "every": "1d"
+  },
+  "target": {
+    "kind": "workflow",
+    "id": "web-release"
+  },
+  "input": {},
+  "enabled": false
+}
