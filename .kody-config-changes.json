@@ -1,0 +1,18 @@
+{
+  "changes": [
+    {
+      "analysis": "Added release capabilities to activeCapabilities list",
+      "added": "release-prepare,release-validate,release-merge,release-promote,vercel-production-deploy",
+      "removed": [],
+      "modified": [],
+      "comment": "Added all release-related capabilities required by the Web Release Blueprint"
+    },
+    {
+      "analysis": "Set currentVersion to 1.0.1",
+      "added": "currentVersion",
+      "removed": [],
+      "modified": [],
+      "comment": "Added version tracking for the configuration"
+    }
+  ]
+}
