@@ -48,6 +48,7 @@ jobs:
       run: pnpm smoke-test
       env:
         NEXT_PUBLIC_SERVER_URL: ${{ secrets.VERCEL_PROJECT_PRODUCTION_URL }}
+        PAYLOAD_SECRET: test-secret-for-ci
     - name: Verify deployment
       run: curl -s ${{ secrets.VERCEL_PROJECT_PRODUCTION_URL }}/healthz || (echo 'Deployment verification failed' && exit 1)
 

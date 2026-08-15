@@ -52,3 +52,4 @@ jobs:
         run: pnpm smoke-test
         env:
           NODE_OPTIONS: --no-deprecation
+          PAYLOAD_SECRET: test-secret-for-ci
