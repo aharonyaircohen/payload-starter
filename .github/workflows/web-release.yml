@@ -1,0 +1,83 @@
+name: Web Release
+
+on:
+  push:
+    branches: [dev]
+  workflow_dispatch:
+
+jobs:
+  prepare-release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v4
+      with:
+        version: 9
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+    - name: Build production
+      run: pnpm build
+    - name: Deploy to Vercel
+      run: Vercel CLI deploy --project-id ${{ secrets.VERCEL_PROJECT_ID }} --org-id ${{ secrets.VERCEL_ORG_ID }} --token ${{ secrets.VERCEL_ACCESS_TOKEN }}
+      env:
+        VERCEL_PROJECT_PRODUCTION_URL: ${{ env.NEXT_PUBLIC_SERVER_URL }}
+
+  validate-release:
+    needs: prepare-release
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v4
+      with:
+        version: 9
+    - name: Run smoke test
+      run: pnpm smoke-test
+      env:
+        NEXT_PUBLIC_SERVER_URL: ${{ secrets.VERCEL_PROJECT_PRODUCTION_URL }}
+    - name: Verify deployment
+      run: curl -s ${{ secrets.VERCEL_PROJECT_PRODUCTION_URL }}/healthz || (echo 'Deployment verification failed' && exit 1)
+
+  promote-release:
+    needs: validate-release
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - name: Create release PR
+      uses: ./.kody-engine/definitions/actions/create-release-pr.sh
+      with:
+        branch: main
+    - name: Wait for PR merge
+      run: | # Wait for PR to merge (simplified implementation)
+          while ! gh api --jq '.head.committed_datetime' pull-requests/$(gh pr view --json number).head.ref; do
+            sleep 60
+          done
+
+  smoke-check:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    steps:
+    - name: Verify production URL
+      run: |
+        if ! curl -s -o /dev/null -w '%{http_code}' ${{ secrets.VERCEL_PROJECT_PRODUCTION_URL }} | grep -q '200'; then
+          echo 'Production URL verification failed' >> $GITHUB_OUTPUT
+          exit 1
+        fi
+        echo 'Production URL verified successfully' >> $GITHUB_OUTPUT
