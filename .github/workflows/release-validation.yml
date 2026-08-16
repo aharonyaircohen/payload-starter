@@ -2,7 +2,13 @@ name: Release Validation
 
 on:
   pull_request:
-    branches: [main]
+    branches: [dev]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'Pull request number to validate'
+        required: false
+        type: string
 
 jobs:
   validate-release:
