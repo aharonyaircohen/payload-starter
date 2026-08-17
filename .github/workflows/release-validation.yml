@@ -7,7 +7,7 @@ on:
     inputs:
       pr_number:
         description: 'Pull request number to validate'
-        required: false
+        required: true
         type: string
 
 jobs:
