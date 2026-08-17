@@ -8,20 +8,7 @@ let payload: Payload
 describe('API', () => {
   beforeAll(async () => {
     const payloadConfig = await config
-    payload = await getPayload({
-      config: payloadConfig,
-      initOptions: {
-        defaultGlobalAccess: false,
-        defaultRead: false,
-        defaultCreate: false,
-        defaultDelete: false,
-        defaultUpdate: false,
-        defaultAdminAccess: false,
-        disableDatabases: false,
-        disableLocalAlgorithm: true,
-        allowUnknownFields: false,
-      }
-    })
+    payload = await getPayload({ config: payloadConfig })
   })
 
   it('fetches users', async () => {
