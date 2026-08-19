@@ -20,6 +20,15 @@
   "git": {
     "defaultBranch": "dev"
   },
+  "release": {
+    "releaseBranch": "main",
+    "versionFiles": [
+      "package.json"
+    ],
+    "timeoutMs": 1200000,
+    "productionUrl": "https://payload-starter.vercel.app",
+    "smokeCommand": "pnpm smoke-test"
+  },
   "github": {
     "owner": "aharonyaircohen",
     "repo": "payload-starter"
