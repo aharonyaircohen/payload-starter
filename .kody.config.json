@@ -1,5 +1,114 @@
 {
-  "activeAgents": ["kody"],
-  "activeCapabilities": ["prepare-strategy-application", "apply-strategy", "ci-health-check", "fix-ci", "release-prepare", "release-validate", "release-merge", "release-promote", "vercel-production-deploy"],
-  "activeWorkflows": ["apply-strategy", "web-release"]
+  "activeAgents": [
+    "kody"
+  ],
+  "activeCapabilities": [
+    "prepare-strategy-application",
+    "apply-strategy",
+    "ci-health-check",
+    "fix-ci",
+    "release-prepare",
+    "release-validate",
+    "release-merge",
+    "release-promote",
+    "vercel-production-deploy"
+  ],
+  "activeWorkflows": [
+    "apply-strategy",
+    "web-release"
+  },
+  "git": {
+    "defaultBranch": "dev"
+  },
+  "github": {
+    "owner": "aharonyaircohen",
+    "repo": "payload-starter"
+  },
+  "paths": {
+    "taskDir": ".kody/tasks"
+  },
+  "agent": {
+    "provider": "minimax",
+    "modelMap": {
+      "cheap": "MiniMax-M2.7-highspeed",
+      "mid": "MiniMax-M2.7-highspeed",
+      "strong": "MiniMax-M2.7-highspeed"
+    },
+    "model": "openrouter/free"
+  },
+  "release": {
+    "releaseBranch": "main",
+    "versionFiles": [
+      "package.json"
+    ],
+    "notifyCommand": "NOTIFY_RESULT=always NOTIFY_VERSION=$VERSION pnpm tsx scripts/kody/notify.ts --agent release-publisher --channels slack --when always --color good --title \"🚀 A-Guy v$VERSION released\" --body \"Release $VERSION finalized — https://github.com/aharonyaircohen/payload-starter/releases/tag/v$VERSION\"",
+    "e2eCommand": "pnpm test:e2e",
+    "timeoutMs": 1200000,
+    "productionUrl": "https://payload-starter.vercel.app",
+    "smokeCommand": "pnpm smoke-test"
+  },
+  "stages": {
+    "taskify": {
+      "maxTurns": 300,
+      "maxBudgetUsd": 15
+    },
+    "plan": {
+      "maxTurns": 300,
+      "maxBudgetUsd": 10
+    },
+    "build": {
+      "maxTurns": 1000,
+      "maxBudgetUsd": 50
+    },
+    "verify": {
+      "maxTurns": 200,
+      "maxBudgetUsd": 5
+    },
+    "review": {
+      "maxTurns": 300,
+      "maxBudgetUsd": 10
+    },
+    "review-fix": {
+      "maxTurns": 600,
+      "maxBudgetUsd": 30
+    },
+    "ship": {
+      "maxTurns": 200,
+      "maxBudgetUsd": 5
+    }
+  },
+  "timeouts": {
+    "taskify": 6000,
+    "plan": 6000,
+    "build": 24000,
+    "verify": 3000,
+    "review": 6000,
+    "review-fix": 12000,
+    "ship": 2400
+  },
+  "devServer": {
+    "command": "pnpm dev",
+    "url": "http://localhost:3000",
+    "readyPattern": "Ready in|compiled|started server|Local:|localhost:|✓ Ready",
+    "readyTimeout": 180,
+    "env": [
+      "AI_BASE_URL",
+      "AI_KEY",
+      "AI_MODEL",
+      "BLOB_READ_WRITE_TOKEN",
+      "BRAIN_AUTH_KEY",
+      "CRON_SECRET",
+      "DATABASE_URL",
+      "DATABASE_URL_ATLAS",
+      "FIGMA_API_KEY",
+      "GEMINI_API_KEY",
+      "GROQ_API_KEY",
+      "MINIMAX_API_KEY",
+      "NEXT_PUBLIC_SERVER_URL",
+      "OPENAI_API_KEY",
+      "PAYLOAD_SECRET",
+      "SLACK_WEBHOOK_URL",
+      "SLACK_WEBHOOK_URL_DEV"
+    ]
+  }
 }
