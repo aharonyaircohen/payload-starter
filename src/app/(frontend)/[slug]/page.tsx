@@ -30,7 +30,7 @@ export async function generateStaticParams() {
       return doc.slug && doc.slug !== 'home'
     })
     .map(({ slug }) => {
-      return { slug: encodeURIComponent(slug) }
+      return { slug: slug }
     })
 
   return params
@@ -75,8 +75,8 @@ export default async function Page({ params: paramsPromise }: Args) {
 
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
   const { slug = 'home' } = await paramsPromise
-  const encodedSlug = encodeURIComponent(slug) // Ensure slug is properly encoded
-  const decodedSlug = decodeURIComponent(encodedSlug)
+  // Decode to support slugs with special characters
+  const decodedSlug = decodeURIComponent(slug)
   const page = await queryPageBySlug({
     slug: decodedSlug,
   })
