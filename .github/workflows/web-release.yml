@@ -4,7 +4,15 @@ on:
   workflow_dispatch:
     inputs: {}
   workflow_call:
-    inputs: {}
+    inputs:
+      release_branch:
+        description: 'Branch to deploy to production'
+        required: true
+        type: string
+      production_url:
+        description: 'Production URL to verify after deployment'
+        required: true
+        type: string
     secrets: [
       "VERCEL_ACCESS_TOKEN",
       "VERCEL_ORG_ID",
@@ -12,7 +20,14 @@ on:
     ]
 
 jobs:
-  prepare-release:
+  validate-release:
+    uses: ./.github/workflows/release-validation.yml
+    with:
+      pr_number: ${{ github.event.inputs.pr_number || '' }}
+    secrets: inherit
+
+  deploy-to-production:
+    needs: validate-release
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -32,45 +47,21 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Build production
         run: pnpm build
-      - name: Deploy to Vercel
-        run: Vercel CLI deploy --project-id ${{ secrets.VERCEL_PROJECT_ID }} --org-id ${{ secrets.VERCEL_ORG_ID }} --token ${{ secrets.VERCEL_ACCESS_TOKEN }}
+      - name: Deploy to Vercel Production
+        run: npx vercel --prod --scope ${{ secrets.VERCEL_ORG_ID }} --token ${{ secrets.VERCEL_ACCESS_TOKEN }}
         env:
-          VERCEL_PROJECT_PRODUCTION_URL: ${{ env.NEXT_PUBLIC_SERVER_URL }}
-      - name: Validate release
-        run: pnpm smoke-test
-        env:
-          NEXT_PUBLIC_SERVER_URL: ${{ secrets.VERCEL_PROJECT_PRODUCTION_URL }}
-          PAYLOAD_SECRET: test-secret-for-ci
-      - name: Verify deployment
-        run: curl -s ${{ secrets.VERCEL_PROJECT_PRODUCTION_URL }}/healthz || (echo 'Deployment verification failed' && exit 1)
-
-  promote-release:
-    needs: validate-release
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Create release PR
-        uses: ./.kody-engine/definitions/actions/create-release-pr.sh
-        with:
-          branch: main
-      - name: Wait for PR merge
-        run: | # Wait for PR to merge (simplified implementation)
-            while ! gh api --jq '.head.committed_datetime' pull-requests/$(gh pr view --json number).head.ref; do
-              sleep 60
-            done
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
   smoke-check:
+    needs: deploy-to-production
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
+    timeout-minutes: 10
     steps:
       - name: Verify production URL
         run: |
-          if ! curl -s -o /dev/null -w '%{http_code}' ${{ secrets.VERCEL_PROJECT_PRODUCTION_URL }} | grep -q '200'; then
-            echo 'Production URL verification failed' >> $GITHUB_OUTPUT
+          if ! curl -s -o /dev/null -w '%{http_code}' ${{ inputs.production_url }} | grep -q '200'; then
+            echo 'Production URL verification failed'
             exit 1
           fi
-          echo 'Production URL verified successfully' >> $GITHUB_OUTPUT
+          echo 'Production URL verified successfully'
