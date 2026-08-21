@@ -1,5 +1,5 @@
 {
-  "name": "daily-web-release-loop",
+  "id": "daily-web-release-loop",
   "trigger": {
     "type": "schedule",
     "every": "1d"
