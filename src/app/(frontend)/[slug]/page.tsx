@@ -35,7 +35,7 @@ export async function generateStaticParams() {
       })
 
     return params
-  } catch (e) {
+  } catch (_) {
     // If payload initialization fails (e.g., missing DB), return empty array
     return []
   }
