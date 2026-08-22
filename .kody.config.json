@@ -3,15 +3,14 @@
     "kody"
   ],
   "activeCapabilities": [
-    "prepare-strategy-application",
-    "apply-strategy",
     "ci-health-check",
     "fix-ci",
     "release-prepare",
-    "release-validate",
     "release-merge",
-    "release-promote",
-    "vercel-production-deploy"
+    "vercel-production-deploy",
+    "prepare-strategy-application",
+    "apply-strategy",
+    "release-validate"
   ],
   "activeWorkflows": [
     "apply-strategy",
