@@ -1,4 +1,8 @@
 {
   "version": 2,
-  "framework": "nextjs"
+  "framework": "nextjs",
+  "vercel": {
+    "project": "payload-starter",
+    "org": "aharonyaircohen"
+  }
 }

@@ -54,6 +54,9 @@ jobs:
           PAYLOAD_SECRET: test-secret-for-ci
           NEXT_PUBLIC_SERVER_URL: http://localhost:3000
 
+      - name: Generate types
+        run: pnpm run generate:types
+
       - name: Run smoke test
         run: pnpm smoke-test
         env:
