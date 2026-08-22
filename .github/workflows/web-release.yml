@@ -13,11 +13,7 @@ on:
         description: 'Production URL to verify after deployment'
         required: true
         type: string
-    secrets: [
-      "VERCEL_ACCESS_TOKEN",
-      "VERCEL_ORG_ID",
-      "VERCEL_PROJECT_ID"
-    ]
+    secrets: []
 
 jobs:
   validate-release:
