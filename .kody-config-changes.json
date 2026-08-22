@@ -1,18 +1,12 @@
 {
-  "changes": [
-    {
-      "analysis": "Added release capabilities to activeCapabilities list",
-      "added": "release-prepare,release-validate,release-merge,release-promote,vercel-production-deploy",
-      "removed": [],
-      "modified": [],
-      "comment": "Added all release-related capabilities required by the Web Release Blueprint"
-    },
-    {
-      "analysis": "Set currentVersion to 1.0.1",
-      "added": "currentVersion",
-      "removed": [],
-      "modified": [],
-      "comment": "Added version tracking for the configuration"
-    }
-  ]
+  "release": {
+    "branch": "main",
+    "versionFiles": [
+      "package.json"
+    ],
+    "notifyCommand": "NOTIFY_RESULT=always NOTIFY_VERSION=$VERSION pnpm tsx scripts/kody/notify.ts --agent release-publisher --channels slack --when always --color good --title \"🚀 A-Guy v$VERSION released\" --body \"Release $VERSION finalized — https://github.com/aharonyaircohen/payload-starter/releases/tag/v$VERSION\"",
+    "productionUrl": "https://payload-starter.vercel.app",
+    "smokeCommand": "pnpm smoke-test",
+    "timeoutMs": 1800000
+  }
 }
