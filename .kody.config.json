@@ -10,7 +10,8 @@
     "vercel-production-deploy",
     "prepare-strategy-application",
     "apply-strategy",
-    "release-validate"
+    "release-validate",
+    "release-promote"
   ],
   "activeWorkflows": [
     "apply-strategy",
