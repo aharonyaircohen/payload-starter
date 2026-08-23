@@ -1,5 +1,9 @@
 import { MongoDBContainer, StartedMongoDBContainer } from '@testcontainers/mongodb'
 
+declare global {
+  var __MONGO_CONTAINER: StartedMongoDBContainer | undefined
+}
+
 /**
  * Start MongoDB test container
  * Returns connection URI
