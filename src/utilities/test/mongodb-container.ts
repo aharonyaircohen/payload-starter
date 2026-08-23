@@ -1,29 +1,21 @@
 import { MongoDBContainer, StartedMongoDBContainer } from '@testcontainers/mongodb'
 
 /**
- * Global container instance for tests
- * This ensures we reuse the same container across test files
- */
-let mongoContainer: StartedMongoDBContainer | null = null
-
-/**
  * Start MongoDB test container
  * Returns connection URI
  */
 export async function startMongoContainer(): Promise<string> {
-  if (!mongoContainer) {
-    mongoContainer = await new MongoDBContainer('mongo:7').start()
-  }
-  return mongoContainer.getConnectionString()
+  const container = await new MongoDBContainer('mongo:7').start()
+  return container.getConnectionString()
 }
 
 /**
  * Stop MongoDB test container
  */
 export async function stopMongoContainer(): Promise<void> {
-  if (mongoContainer) {
-    await mongoContainer.stop()
-    mongoContainer = null
+  if (global.__MONGO_CONTAINER) {
+    await global.__MONGO_CONTAINER.stop()
+    delete global.__MONGO_CONTAINER
   }
 }
 
