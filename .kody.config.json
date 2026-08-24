@@ -43,9 +43,13 @@
     ],
     "notifyCommand": "NOTIFY_RESULT=always NOTIFY_VERSION=$VERSION pnpm tsx scripts/kody/notify.ts --agent release-publisher --channels slack --when always --color good --title \"🚀 A-Guy v$VERSION released\" --body \"Release $VERSION finalized — https://github.com/aharonyaircohen/payload-starter/releases/tag/v$VERSION\"",
     "e2eCommand": "pnpm test:e2e",
-    "timeoutMs": 1200000,
+    "timeoutMs": 1800000,
     "productionUrl": "https://payload-starter.vercel.app",
-    "smokeCommand": "pnpm smoke-test"
+    "smokeCommand": "pnpm smoke-test",
+    "productionDeployRequired": true,
+    "validation": {
+      "workflow": "release-validation.yml"
+    }
   },
   "stages": {
     "taskify": {

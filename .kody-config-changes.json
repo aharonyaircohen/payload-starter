@@ -7,6 +7,10 @@
     "notifyCommand": "NOTIFY_RESULT=always NOTIFY_VERSION=$VERSION pnpm tsx scripts/kody/notify.ts --agent release-publisher --channels slack --when always --color good --title \"🚀 A-Guy v$VERSION released\" --body \"Release $VERSION finalized — https://github.com/aharonyaircohen/payload-starter/releases/tag/v$VERSION\"",
     "productionUrl": "https://payload-starter.vercel.app",
     "smokeCommand": "pnpm smoke-test",
-    "timeoutMs": 1800000
+    "timeoutMs": 1800000,
+    "productionDeployRequired": true,
+    "validation": {
+      "workflow": "release-validation.yml"
+    }
   }
 }
