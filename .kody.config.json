@@ -38,6 +38,10 @@
   },
   "release": {
     "releaseBranch": "main",
+    "version": {
+      "read": "node -p \"require('./package.json').version\"",
+      "write": "pnpm version --no-git-tag-version"
+    },
     "versionFiles": [
       "package.json"
     ],
@@ -48,7 +52,10 @@
     "smokeCommand": "pnpm smoke-test",
     "productionDeployRequired": true,
     "validation": {
-      "workflow": "release-validation.yml"
+      "workflow": "release-validation.yml",
+      "inputs": {
+        "pr_number": "${{ github.event.pull_request.number || '' }}"
+      }
     }
   },
   "stages": {
