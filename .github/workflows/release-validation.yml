@@ -9,6 +9,13 @@ on:
         description: 'Pull request number to validate'
         required: true
         type: string
+  workflow_call:
+    inputs:
+      pr_number:
+        description: 'Pull request number to validate'
+        required: false
+        type: string
+        default: ''
 
 jobs:
   validate-release:
