@@ -16,6 +16,7 @@ on:
         required: false
         type: string
         default: ''
+    secrets: [VERCEL_ACCESS_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID]
 
 jobs:
   validate-release:
