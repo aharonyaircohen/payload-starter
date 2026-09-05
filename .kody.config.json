@@ -1,4 +1,5 @@
 {
+  "$schema": "https://raw.githubusercontent.com/aharonyaircohen/Kody-Engine-Lite/main/kody.config.schema.json",
   "activeAgents": [
     "kody"
   ],
