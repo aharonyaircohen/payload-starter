@@ -11,13 +11,6 @@ Sentry.init({
 
   // Disable in development
   enabled: process.env.NODE_ENV === 'production',
-
-  integrations: [
-    Sentry.replayIntegration({
-      maskAllText: true,
-      blockAllMedia: true,
-    }),
-  ],
 })
 
 // Export onRequestError hook for Sentry SDK
