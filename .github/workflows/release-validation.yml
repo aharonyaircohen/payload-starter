@@ -7,8 +7,9 @@ on:
     inputs:
       pr_number:
         description: 'Pull request number to validate'
-        required: true
+        required: false
         type: string
+        default: ''
   workflow_call:
     inputs:
       pr_number:
