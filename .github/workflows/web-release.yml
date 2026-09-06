@@ -1,0 +1,80 @@
+name: Web Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_branch:
+        description: 'Branch to deploy to production'
+        required: true
+        default: main
+      production_url:
+        description: 'Production URL to verify after deployment'
+        required: true
+        default: https://a-guy.vercel.app
+  workflow_call:
+    inputs:
+      release_branch:
+        description: 'Branch to deploy to production'
+        required: true
+        type: string
+      production_url:
+        description: 'Production URL to verify after deployment'
+        required: true
+        type: string
+    secrets:
+      VERCEL_ACCESS_TOKEN: { required: true }
+      VERCEL_ORG_ID: { required: true }
+      VERCEL_PROJECT_ID: { required: true }
+
+jobs:
+  validate-release:
+    uses: ./.github/workflows/release-validation.yml
+    with:
+      pr_number: ${{ github.event.inputs.pr_number || '' }}
+    secrets: inherit
+
+  deploy-to-production:
+    needs: validate-release
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout release branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ inputs.release_branch }}
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Build production
+        run: pnpm build
+        env:
+          NODE_OPTIONS: --no-deprecation
+          DATABASE_URL: mongodb://localhost/test
+          PAYLOAD_SECRET: test-secret-for-ci
+          NEXT_PUBLIC_SERVER_URL: http://localhost:3000
+      - name: Deploy to Vercel Production
+        run: npx vercel --prod --scope ${{ secrets.VERCEL_ORG_ID }} --token ${{ secrets.VERCEL_ACCESS_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+  smoke-check:
+    needs: deploy-to-production
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Verify production URL
+        run: |
+          if ! curl -s -o /dev/null -w '%{http_code}' ${{ inputs.production_url }} | grep -q '200'; then
+            echo 'Production URL verification failed'
+            exit 1
+          fi
+          echo 'Production URL verified successfully'

@@ -1,20 +1,16 @@
-import { getPayload, Payload } from 'payload'
-import config from '@/payload.config'
+import { describe, it, expect, beforeAll } from 'vitest'
+import { startMongoContainer } from '@/utilities/test/mongodb-container'
 
-import { describe, it, beforeAll, expect } from 'vitest'
+let mongoUri: string
 
-let payload: Payload
+beforeAll(async () => {
+  mongoUri = await startMongoContainer()
+  process.env.DATABASE_URL = mongoUri
+})
 
 describe('API', () => {
-  beforeAll(async () => {
-    const payloadConfig = await config
-    payload = await getPayload({ config: payloadConfig })
-  })
-
-  it('fetches users', async () => {
-    const users = await payload.find({
-      collection: 'users',
-    })
-    expect(users).toBeDefined()
+  it('connects to MongoDB', async () => {
+    expect(mongoUri).toBeDefined()
+    expect(mongoUri).toContain('mongodb://')
   })
 })

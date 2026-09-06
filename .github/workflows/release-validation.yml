@@ -1,0 +1,73 @@
+name: Release Validation
+
+on:
+  pull_request:
+    branches: [dev, main]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'Pull request number to validate'
+        required: false
+        type: string
+        default: ''
+  workflow_call:
+    inputs:
+      pr_number:
+        description: 'Pull request number to validate'
+        required: false
+        type: string
+        default: ''
+    secrets: [VERCEL_ACCESS_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID]
+
+jobs:
+  validate-release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run typecheck
+        run: pnpm typecheck
+
+      - name: Run ESLint
+        run: pnpm lint
+
+      - name: Run unit tests
+        run: pnpm test:int
+        env:
+          PAYLOAD_ADMIN_PASSWORD: ${{ secrets.PAYLOAD_ADMIN_PASSWORD || 'dev_password' }}
+
+      - name: Build production
+        run: pnpm build
+        env:
+          NODE_OPTIONS: --no-deprecation
+          DATABASE_URL: mongodb://localhost/test
+          PAYLOAD_SECRET: test-secret-for-ci
+          NEXT_PUBLIC_SERVER_URL: http://localhost:3000
+
+      - name: Generate types
+        run: pnpm run generate:types
+
+      - name: Run smoke test
+        run: pnpm smoke-test
+        env:
+          NODE_OPTIONS: --no-deprecation
+          PAYLOAD_SECRET: test-secret-for-ci

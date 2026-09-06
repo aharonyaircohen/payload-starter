@@ -12,3 +12,6 @@ Sentry.init({
   // Disable in development
   enabled: process.env.NODE_ENV === 'production',
 })
+
+// Export onRequestError hook for Sentry SDK
+export const onRequestError = Sentry.captureRequestError
