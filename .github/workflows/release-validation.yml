@@ -14,9 +14,8 @@ on:
     inputs:
       pr_number:
         description: 'Pull request number to validate'
-        required: false
+        required: true
         type: string
-        default: ''
     secrets: [VERCEL_ACCESS_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID]
 
 jobs:
