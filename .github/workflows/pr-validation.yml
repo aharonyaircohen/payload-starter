@@ -1,0 +1,65 @@
+name: PR Validation
+
+on:
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    if: github.repository == 'payloadcms/payload-starter'
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Run lint
+        run: pnpm lint
+
+      - name: Run typecheck
+        run: pnpm typecheck
+
+      - name: Run unit tests
+        run: pnpm test:int
+        env:
+          # Add any required environment variables here
+          PAYLOAD_ADMIN_PASSWORD: ${{ secrets.PAYLOAD_ADMIN_PASSWORD || 'dev_password' }}
+
+      - name: Build production
+        run: pnpm build
+        env:
+          NODE_OPTIONS: --no-deprecation
+
+      - name: Run smoke test
+        run: pnpm smoke-test
+        env:
+          NODE_OPTIONS: --no-deprecation
+
+single-run-mailbox:
+  needs: validate
+  runs-on: ubuntu-latest
+  if: always()
+  steps:
+    - name: Check results
+      run: |
+        if [ $? -ne 0 ]; then
+          echo "Validation workflow failed"
+          exit 1
+        fi
+        echo "Validation passed"

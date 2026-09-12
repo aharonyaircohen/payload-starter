@@ -1,0 +1,19 @@
+{
+  "id": "release-validation",
+  "trigger": {
+    "type": "workflow_dispatch",
+    "inputs": {
+      "pr_number": {
+        "type": "string",
+        "description": "Pull request number to validate",
+        "required": true
+      }
+    }
+  },
+  "target": {
+    "kind": "workflow",
+    "id": "release-validation"
+  },
+  "input": {},
+  "enabled": true
+}

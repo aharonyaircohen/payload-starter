@@ -1,0 +1,20 @@
+{
+  "activeAgents": [
+    "kody"
+  ],
+  "activeCapabilities": [
+    "prepare-strategy-application",
+    "apply-strategy",
+    "ci-health-check",
+    "fix-ci",
+    "release-prepare",
+    "release-validate",
+    "release-merge",
+    "release-promote",
+    "vercel-production-deploy"
+  ],
+  "activeWorkflows": [
+    "apply-strategy",
+    "web-release"
+  ]
+}

@@ -1,0 +1,78 @@
+name: Release Promote
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Run typecheck
+        run: pnpm typecheck
+      - name: Run ESLint
+        run: pnpm lint
+      - name: Run unit tests
+        run: pnpm test:int
+        env:
+          PAYLOAD_ADMIN_PASSWORD: ${{ secrets.PAYLOAD_ADMIN_PASSWORD || 'dev_password' }}
+      - name: Build production
+        run: pnpm build
+        env:
+          NODE_OPTIONS: --no-deprecation
+          DATABASE_URL: mongodb://localhost/test
+          PAYLOAD_SECRET: test-secret-for-ci
+          NEXT_PUBLIC_SERVER_URL: http://localhost:3000
+      - name: Generate types
+        run: pnpm run generate:types
+      - name: Run smoke test
+        run: pnpm smoke-test
+        env:
+          NODE_OPTIONS: --no-deprecation
+          PAYLOAD_SECRET: test-secret-for-ci
+          NEXT_PUBLIC_SERVER_URL: http://localhost:3000
+      - name: Create PR to main
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          base: main
+          head: dev
+          title: "Release promotion from dev to main"
+          body: "Automated promotion of release from dev to main."
+      - name: Merge PR
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const pr = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              head: 'dev',
+              base: 'main',
+              state: 'open'
+            });
+            if (pr.data.length > 0) {
+              const prNumber = pr.data[0].number;
+              await github.rest.pulls.merge({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: prNumber,
+                merge_method: 'squash'
+              });
+            }
