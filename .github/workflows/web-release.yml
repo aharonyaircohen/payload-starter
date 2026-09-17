@@ -11,6 +11,11 @@ on:
         description: 'Production URL to verify after deployment'
         required: true
         default: https://a-guy.vercel.app
+      pr_number:
+        description: 'Pull request number for release validation'
+        required: false
+        type: string
+        default: ''
   workflow_call:
     inputs:
       release_branch:
@@ -21,6 +26,11 @@ on:
         description: 'Production URL to verify after deployment'
         required: true
         type: string
+      pr_number:
+        description: 'Pull request number for release validation'
+        required: false
+        type: string
+        default: ''
     secrets:
       VERCEL_ACCESS_TOKEN: { required: true }
       VERCEL_ORG_ID: { required: true }
