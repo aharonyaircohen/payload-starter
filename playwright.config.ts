@@ -37,5 +37,10 @@ export default defineConfig({
     command: 'pnpm dev',
     reuseExistingServer: true,
     url: 'http://localhost:3000',
+    env: {
+      DATABASE_URL: 'mongodb://localhost/test',
+      NEXT_PUBLIC_SERVER_URL: 'http://localhost:3000',
+      PAYLOAD_SECRET: 'test-secret-for-ci',
+    },
   },
 })

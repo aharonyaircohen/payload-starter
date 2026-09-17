@@ -1,0 +1,12 @@
+name: Vercel Production Deploy
+
+on:
+  workflow_dispatch:
+    inputs: {}
+  workflow_call:
+    inputs: {}
+    secrets: [
+      "VERCEL_ACCESS_TOKEN",
+      "VERCEL_ORG_ID",
+      "VERCEL_PROJECT_ID"
+    ]

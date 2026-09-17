@@ -1,0 +1,16 @@
+[
+  {
+    "id": "1",
+    "title": "Run validation workflow on next PR",
+    "description": "Trigger release-validation.yml on a release PR to verify complete pipeline",
+    "priority": "high",
+    "assignee": "kody"
+  },
+  {
+    "id": "2",
+    "title": "Verify production deployment URL",
+    "description": "Confirm a-guy.vercel.app is the correct production URL",
+    "priority": "medium",
+    "assignee": "owner"
+  }
+]
